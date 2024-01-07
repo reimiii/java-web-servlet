@@ -39,7 +39,18 @@ public class FormUpload extends HttpServlet {
 
         Files.copy(profile.getInputStream(), uploadFile);
 
-        resp.getWriter()
-                .println("hello: " + name + ", your images save in: " + uploadFile.toAbsolutePath());
+        String html = """
+                <html>
+                <body>
+                Name : $name
+                <br>
+                Profile : <img width="400px" height="400px" src="/download?file=$profile" />
+                </body>
+                <html>
+                """
+                .replace("$name", name)
+                .replace("$profile", uploadFile.getFileName().toString());
+
+        resp.getWriter().println(html);
     }
 }
